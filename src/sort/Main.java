@@ -1,9 +1,11 @@
 package sort;
 
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         int[] nums = {83, 74, 12, 16, 35, 46, 36, 23, 41, 75};
-        insertSort(nums);
+        shellsSort(nums);
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
@@ -74,30 +76,55 @@ public class Main {
     }
 
 
-    public static void mergerSort(int[] nums) {
-        merge(nums, 0, nums.length);
-    }
-
-    private static void merge(int[] nums, int left, int right) {
-        int len = (right - left) / 2;
-        if (len > 1) {
-            merge(nums, left, len);
-            merge(nums, len + 1, right);
+    public static int[] mergerSort(int[] nums) {
+        int[] arr = Arrays.copyOf(nums, nums.length);
+        if (arr.length < 2) {
+            return arr;
         }
-        merge2(nums, left, len, right);
+        int len = nums.length / 2;
+        int[] left = Arrays.copyOfRange(nums, 0, len);
+        int[] right = Arrays.copyOfRange(nums, len, nums.length);
+        return merge(mergerSort(left), mergerSort(right));
     }
 
-    private static void merge2(int[] nums, int left, int len, int right) {
-        int l = left;
-        int r = len + 1;
-        for (int i = l; i < len; i++) {
-            for (int j = r; j < right; j++) {
-                if (nums[i] < nums[j]) {
-                    l++;
-                    break;
-                }
-
+    private static int[] merge(int[] left, int[] right) {
+        int[] result = new int[left.length + right.length];
+        int i = 0;
+        while (left.length > 0 && right.length > 0) {
+            if (left[0] > right[0]) {
+                result[i] = right[0];
+                right = Arrays.copyOfRange(right, 1, right.length);
+            } else {
+                result[i] = left[0];
+                left = Arrays.copyOfRange(left, 1, left.length);
             }
+            i++;
+        }
+        for (int j = 0; j < left.length; j++) {
+            result[i++] = left[j];
+        }
+        for (int j = 0; j < right.length; j++) {
+            result[i++] = right[j];
+        }
+        return result;
+    }
+
+    public static void shellsSort(int[] nums) {
+        int gap = nums.length / 2;
+        while (gap > 1) {
+            for (int i = 0; i < gap; i++) {
+                for (int j = i; j < nums.length; j = j + gap) {
+                    int k = j;
+                    int tmp = nums[j + gap];
+                    for (; k > i && nums[k] > tmp; k = k - gap) {
+                        nums[k + gap] = nums[k];
+                    }
+                    if (k != j) {
+                        nums[k] = tmp;
+                    }
+                }
+            }
+            gap = gap / 2;
         }
     }
 
