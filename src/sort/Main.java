@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws Exception {
         int[] nums = {32, 83, 74, 12, 16, 35, 46, 36, 23, 41, 75, 1, 99, 45, 63, 11};
-        quickSort(nums);
+        shellsSort(nums);
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
@@ -116,10 +116,9 @@ public class Main {
                 int tmp = arr[i];
                 int j = i - gap;
                 while (j >= 0 && arr[j] > tmp) {
-                    arr[j + gap] = arr[j];
+                    swap(arr, j + gap, j);
                     j -= gap;
                 }
-                arr[j + gap] = tmp;
             }
 
             gap = gap / 2;
