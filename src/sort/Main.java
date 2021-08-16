@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws Exception {
         int[] nums = {83, 74, 12, 16, 35, 46, 36, 23, 41, 75};
-        shellsSort(nums);
+        quickSort(nums);
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
@@ -109,23 +109,55 @@ public class Main {
         return result;
     }
 
-    public static void shellsSort(int[] nums) {
-        int gap = nums.length / 2;
-        while (gap > 1) {
-            for (int i = 0; i < gap; i++) {
-                for (int j = i; j < nums.length; j = j + gap) {
-                    int k = j;
-                    int tmp = nums[j + gap];
-                    for (; k > i && nums[k] > tmp; k = k - gap) {
-                        nums[k + gap] = nums[k];
-                    }
-                    if (k != j) {
-                        nums[k] = tmp;
-                    }
+    public static void shellsSort(int[] arr) {
+        int gap = arr.length / 2;
+        while (gap > 0) {
+            for (int i = gap; i < arr.length; i++) {
+                int tmp = arr[i];
+                int j = i - gap;
+                while (j >= 0 && arr[j] > tmp) {
+                    arr[j + gap] = arr[j];
+                    j -= gap;
                 }
+                arr[j + gap] = tmp;
             }
+
             gap = gap / 2;
         }
+    }
+
+    public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length);
+    }
+
+    private static void quickSort(int[] arr, int left, int right) {
+        if (right - left < 2) {
+            return;
+        }
+        int l = left + 1;
+        int r = right - 1;
+
+        int tmp = arr[left];
+        int tmp2 = arr[l];
+        //
+        while (l <= r) {
+            if (tmp > tmp2) {
+                arr[l - 1] = tmp2;
+                l++;
+                if (l < right) {
+                    tmp2 = arr[l];
+                }
+            } else {
+                int tmp3 = arr[r];
+                arr[r] = tmp2;
+                tmp2 = tmp3;
+                r--;
+            }
+        }
+        int p = l - 1;
+        arr[p] = tmp;
+        quickSort(arr, left, p);
+        quickSort(arr, p + 1, right);
     }
 
     private static void swap(int[] nums, int a, int b) {
