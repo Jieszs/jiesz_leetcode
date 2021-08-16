@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws Exception {
         int[] nums = {32, 83, 74, 12, 16, 35, 46, 36, 23, 41, 75, 1, 99, 45, 63, 11};
-        shellsSort(nums);
+        heapSort(nums);
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
@@ -146,6 +146,63 @@ public class Main {
         arr[index - 1] = tmp;
         quickSort(arr, left, index - 1);
         quickSort(arr, index, right);
+    }
+
+    public static void heapSort(int[] nums) {
+        //拼凑最大堆
+        for (int i = 0; i < nums.length; i++) {
+            buildMaxHeap(nums, i);
+        }
+        //取出最大，重新构建最大堆
+        for (int i = nums.length - 1; i > 0; i--) {
+            heapify(nums, i);
+        }
+    }
+
+    private static void heapify(int[] nums, int len) {
+        swap(nums, 0, len);
+        shift(nums, 0, len - 1);
+    }
+
+    private static void shift(int[] nums, int i, int len) {
+        int l = i * 2 + 1;
+        int r = l + 1;
+        //没有左节点，返回
+        if (l > len) {
+            return;
+        }
+        //左右节点都有，选最大的，之后在shift一次
+        if (r <= len) {
+            int max = i;
+            if (nums[max] < nums[l]) {
+                max = l;
+            }
+            if (nums[max] < nums[r]) {
+                max = r;
+            }
+            if (max == i) {
+                return;
+            }
+            swap(nums, i, max);
+            shift(nums, max, len);
+            return;
+        }
+        //最后的左节点
+        if (nums[l] > nums[i]) {
+            swap(nums, l, i);
+        }
+
+    }
+
+    private static void buildMaxHeap(int[] nums, int len) {
+        int parent = (len + 1) / 2;
+        if (parent < 1) {
+            return;
+        }
+        if (nums[parent - 1] < nums[len]) {
+            swap(nums, parent - 1, len);
+            buildMaxHeap(nums, parent - 1);
+        }
     }
 
     private static void swap(int[] nums, int a, int b) {
