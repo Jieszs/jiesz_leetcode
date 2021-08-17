@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws Exception {
         int[] nums = {32, 83, 74, 12, 16, 35, 46, 36, 23, 41, 75, 1, 99, 45, 63, 11};
-        buckSort(nums, 6);
+        radixSort(nums);
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
@@ -194,6 +194,34 @@ public class Main {
 
     }
 
+    public static void radixSort(int[] nums) {
+        int max = getMaxVal(nums);
+        int digital = getDigital(max);
+        int[][] arr = new int[10][0];
+        for (int j = 0; j < nums.length; j++) {
+            int a = getCurrentNum(nums[j], 1);
+            arr[a] = appendBuck(arr[a], nums[j]);
+        }
+        for (int i = 2; i <= digital; i++) {
+            int[][] brr = new int[10][0];
+            for (int j = 0; j < 10; j++) {
+                int[] crr = arr[j];
+                for (int k = 0; k < crr.length; k++) {
+                    int a = getCurrentNum(crr[k], digital);
+                    brr[a] = appendBuck(brr[a], crr[k]);
+                }
+            }
+            arr = brr;
+        }
+        int i = 0;
+        for (int j = 0; j < 10; j++) {
+            int[] crr = arr[j];
+            for (int k = 0; k < crr.length; k++) {
+                nums[i++] = crr[k];
+            }
+        }
+    }
+
     public static void buckSort(int[] nums, int buckSize) {
         int max = nums[0];
         int min = nums[0];
@@ -205,7 +233,7 @@ public class Main {
         int[][] buck = new int[buckSize][1];
         for (int i = 0; i < nums.length; i++) {
             //可能出现，value =0 的情况，buck[][0],统一不用
-            buck[(nums[i] - min) / hash] = appendBuck(buck[(nums[i] - min) / hash], nums[i]);
+            buck[(nums[i] - min) / hash] = appendBuckAndSort(buck[(nums[i] - min) / hash], nums[i]);
         }
         int k = 0;
         for (int i = 0; i < buckSize; i++) {
@@ -216,7 +244,7 @@ public class Main {
         }
     }
 
-    private static int[] appendBuck(int[] arr, int num) {
+    private static int[] appendBuckAndSort(int[] arr, int num) {
         arr = Arrays.copyOfRange(arr, 0, arr.length + 1);
         arr[arr.length - 1] = num;
         for (int i = arr.length - 2; i > 0; i--) {
@@ -224,6 +252,12 @@ public class Main {
                 swap(arr, i, i + 1);
             }
         }
+        return arr;
+    }
+
+    private static int[] appendBuck(int[] arr, int num) {
+        arr = Arrays.copyOfRange(arr, 0, arr.length + 1);
+        arr[arr.length - 1] = num;
         return arr;
     }
 
@@ -242,5 +276,31 @@ public class Main {
         int temp = nums[a];
         nums[a] = nums[b];
         nums[b] = temp;
+    }
+
+    private static int getMaxVal(int[] nums) {
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            max = Math.max(max, nums[i]);
+        }
+        return max;
+    }
+
+    private static int getDigital(int num) {
+        int i = 0;
+        while (num > 0) {
+            num /= 10;
+            i++;
+        }
+        return i;
+    }
+
+    private static int getCurrentNum(int num, int index) {
+        int div = 1;
+        while (index - 1 > 0) {
+            div *= 10;
+            index--;
+        }
+        return (num / div) % 10;
     }
 }
