@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws Exception {
         int[] nums = {32, 83, 74, 12, 16, 35, 46, 36, 23, 41, 75, 1, 99, 45, 63, 11};
-        buckSort(nums, 6);
+        heapSort(nums);
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
@@ -194,39 +194,6 @@ public class Main {
 
     }
 
-    public static void buckSort(int[] nums, int buckSize) {
-        int max = nums[0];
-        int min = nums[0];
-        for (int i = 1; i < nums.length; i++) {
-            max = Math.max(max, nums[i]);
-            min = Math.min(min, nums[i]);
-        }
-        int hash = (max - min) / buckSize + 1;
-        int[][] buck = new int[buckSize][1];
-        for (int i = 0; i < nums.length; i++) {
-            //可能出现，value =0 的情况，buck[][0],统一不用
-            buck[(nums[i] - min) / hash] = appendBuck(buck[(nums[i] - min) / hash], nums[i]);
-        }
-        int k = 0;
-        for (int i = 0; i < buckSize; i++) {
-            int[] arr = buck[i];
-            for (int j = 1; j < arr.length; j++) {
-                nums[k++] = arr[j];
-            }
-        }
-    }
-
-    private static int[] appendBuck(int[] arr, int num) {
-        arr = Arrays.copyOfRange(arr, 0, arr.length + 1);
-        arr[arr.length - 1] = num;
-        for (int i = arr.length - 2; i > 0; i--) {
-            if (arr[i] > num) {
-                swap(arr, i, i + 1);
-            }
-        }
-        return arr;
-    }
-
     private static void buildMaxHeap(int[] nums, int len) {
         int parent = (len + 1) / 2;
         if (parent < 1) {
@@ -235,6 +202,27 @@ public class Main {
         if (nums[parent - 1] < nums[len]) {
             swap(nums, parent - 1, len);
             buildMaxHeap(nums, parent - 1);
+        }
+    }
+
+    public static void countSort(int[] nums) {
+        int max = nums[0];
+        int min = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            max = Math.max(max, nums[i]);
+            min = Math.min(min, nums[i]);
+        }
+        int[] arr = new int[max - min + 1];
+        Arrays.fill(arr, 0);
+        for (int i = 0; i < nums.length; i++) {
+            arr[nums[i] - min]++;
+        }
+        for (int i = 0, j = 0; i < arr.length; i++) {
+            if (arr[i] > 0) {
+                for (int k = 0; k < arr[i]; k++) {
+                    nums[j++] = i + min;
+                }
+            }
         }
     }
 
