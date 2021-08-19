@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws Exception {
         int[] nums = {32, 83, 74, 12, 16, 35, 46, 36, 23, 41, 75, 1, 99, 45, 63, 11};
-        radixSort(nums);
+        buckSort(nums, 6);
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
@@ -269,6 +269,27 @@ public class Main {
         if (nums[parent - 1] < nums[len]) {
             swap(nums, parent - 1, len);
             buildMaxHeap(nums, parent - 1);
+        }
+    }
+
+    public static void countSort(int[] nums) {
+        int max = nums[0];
+        int min = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            max = Math.max(max, nums[i]);
+            min = Math.min(min, nums[i]);
+        }
+        int[] arr = new int[max - min + 1];
+        Arrays.fill(arr, 0);
+        for (int i = 0; i < nums.length; i++) {
+            arr[nums[i] - min]++;
+        }
+        for (int i = 0, j = 0; i < arr.length; i++) {
+            if (arr[i] > 0) {
+                for (int k = 0; k < arr[i]; k++) {
+                    nums[j++] = i + min;
+                }
+            }
         }
     }
 
