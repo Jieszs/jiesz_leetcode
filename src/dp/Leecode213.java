@@ -18,12 +18,16 @@ class Solution213 {
 
     public int robRound(int[] value) {
         int len = value.length;
+        if (len == 1) {
+            return value[0];
+        }
         int[] a = Arrays.copyOfRange(value, 0, len - 1);
         int[] b = Arrays.copyOfRange(value, 1, len);
         return Math.max(rob(a), rob(b));
     }
 
     private int rob(int[] value) {
+
         int len = value.length;
         int[] a = new int[len + 1];
         a[0] = 0;

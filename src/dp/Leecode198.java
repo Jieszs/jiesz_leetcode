@@ -12,13 +12,13 @@ package dp;
  */
 class Solution198 {
 
-    public int rob(int[] value) {
-        int len = value.length;
+    public int rob(int[] nums) {
+        int len = nums.length;
         int[] a = new int[len + 1];
         a[0] = 0;
-        a[1] = value[0];
+        a[1] = nums[0];
         for (int i = 2; i <= len; i++) {
-            a[i] = Math.max(a[i - 1], a[i - 2] + value[i - 1]);
+            a[i] = Math.max(a[i - 1], a[i - 2] + nums[i - 1]);
         }
         return a[len];
     }
