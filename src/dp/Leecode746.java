@@ -16,20 +16,18 @@ class Solution746 {
 
     public int climbStairs(int[] cost) {
         int len = cost.length;
-        int[] a = new int[len];
-        a[0] = cost[0];
-        a[1] = cost[1];
-        for (int i = 2; i < len; i++) {
-            a[i] = Math.min(a[i - 1], a[i - 2]) + cost[i];
+        int[] a = new int[len + 1];
+        for (int i = 2; i <= len; i++) {
+            a[i] = Math.min(a[i - 1] + cost[i - 1], a[i - 2] + cost[i - 2]);
         }
-        return a[len - 1];
+        return a[len];
     }
 }
 
 public class Leecode746 {
     public static void main(String[] args) {
         Solution746 solution = new Solution746();
-        int[] cost = {1, 100, 1, 1, 1, 100, 1, 1, 100, 1};
+        int[] cost = {10, 15, 20};
         System.out.println(solution.climbStairs(cost));
     }
 

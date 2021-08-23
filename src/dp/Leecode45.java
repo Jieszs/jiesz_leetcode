@@ -1,7 +1,5 @@
 package dp;
 
-import java.util.Arrays;
-
 /**
  * 45. 跳跃游戏(二)
  * <p>
@@ -13,30 +11,36 @@ import java.util.Arrays;
  * <p>
  * 输入: [2,3,1,1,4]
  * 输出: 2
+ * [1,2]
+ * 1
  * 1 <= nums.length <= 3 * 104
  * 0 <= nums[i] <= 105
+ *
+ * 思路：
+ * 遍历数组，计算每一步能走的最大范围，超过这一步的最大范围，就增加步数
  */
 class Solution45 {
 
     public int jump(int[] nums) {
-        int end = 0;
-        int mx = 0;
-        int steps = 0;
-        for (int i = 0; i < nums.length - 1; ++i) {
-            mx = Math.max(mx, i + nums[i]);
-            if (i == end) {
-                end = mx;
-                ++steps;
+        int len = nums.length;
+        int max = 0;
+        int newMax = 0;
+        int times = 0;
+        for (int i = 0; i < len - 1; i++) {
+            newMax = Math.max(newMax, nums[i] + i);
+            if (i == max) {
+                times++;
+                max = newMax;
             }
         }
-        return steps;
+        return times;
     }
 }
 
 public class Leecode45 {
     public static void main(String[] args) {
         Solution45 solution = new Solution45();
-        int[] nums = {2,3,1,1,4};
+        int[] nums = {1};
         System.out.println(solution.jump(nums));
     }
 
