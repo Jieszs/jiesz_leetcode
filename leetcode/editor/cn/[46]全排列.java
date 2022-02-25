@@ -39,7 +39,32 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            List<Integer> first = new ArrayList<>();
+            int[] v = new int[nums.length];
+            first.add(nums[i]);
+            v[i] = 1;
+            dfs(nums, 1, result, first, v);
+        }
+        return result;
+    }
 
+    public void dfs(int[] nums, int deep, List<List<Integer>> result, List<Integer> pre, int[] v) {
+        if (deep == nums.length) {
+            result.add(pre);
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (v[i] == 1) {
+                continue;
+            }
+            List<Integer> first = new ArrayList<>(pre);
+            v[i] = 1;
+            first.add(nums[i]);
+            dfs(nums, deep + 1, result, first, v);
+            v[i] = 0;
+        }
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

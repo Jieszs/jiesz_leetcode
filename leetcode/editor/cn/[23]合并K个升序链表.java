@@ -47,19 +47,43 @@
 
 
 //leetcode submit region begin(Prohibit modification and deletion)
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-
+        if (lists.length == 0) return null;
+        PriorityQueue<ListNode> queue = new PriorityQueue<>(lists.length + 1, (o1, o2) -> o1.val - o2.val);
+        for (ListNode n : lists) {
+            if (n != null) {
+                queue.offer(n);
+            }
+        }
+        if(queue.isEmpty()){
+            return null;
+        }
+        ListNode head = queue.poll();
+        if (head.next != null) {
+            queue.offer(head.next);
+        }
+        ListNode p = head;
+        while (!queue.isEmpty()) {
+            ListNode t = queue.poll();
+            if (t.next != null) {
+                queue.offer(t.next);
+            }
+            p.next = t;
+            p = p.next;
+        }
+        return head;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

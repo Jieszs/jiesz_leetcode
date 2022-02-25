@@ -34,7 +34,19 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int numSquares(int n) {
-
+        int[] a = new int[101];
+        int[] ans = new int[10001];
+        Arrays.fill(ans, 99999);
+        for (int i = 0; i <= 100; i++) {
+            a[i] = i * i;
+            ans[i * i] = 1;
+        }
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j * j <= i; j++) {
+                ans[i] = Math.min(ans[i], ans[i - a[j]] + 1);
+            }
+        }
+        return ans[n];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

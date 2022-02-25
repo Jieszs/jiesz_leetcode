@@ -31,7 +31,26 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
+    void dfs(int l, int n, String s, List<String> result) {
+        if (l == 0 && n == 0) {
+            result.add(s);
+            return;
+        }
+        if (l - 1 >= 0) {
+            dfs(l - 1, n, s + "(", result);
+        }
+        if (n - 1 >= 0 && n - 1 >= l) {
+            dfs(l, n - 1, s + ")", result);
+        }
+    }
+
     public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        if (n > 0) {
+            dfs(n - 1, n, "(", result);
+        }
+        return result;
 
     }
 }

@@ -34,7 +34,29 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int[][] merge(int[][] intervals) {
-        Arrays.sort(intervals,(a,b)->a[0] - b[0]);
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        int[][] result = new int[intervals.length][2];
+        int cnt = 0;
+        for (int i = 0; i < intervals.length; i++) {
+            int a = intervals[i][0];
+            int b = intervals[i][1];
+            int j = i + 1;
+            for (; j < intervals.length; j++) {
+                int c = intervals[j][0];
+                if (c <= b) {
+                    b = Math.max(intervals[j][1],b);
+                    continue;
+                }
+                break;
+            }
+            int[] t = new int[2];
+            t[0] = a;
+            t[1] = b;
+            result[cnt] = t;
+            cnt++;
+            i = j - 1;
+        }
+        return Arrays.copyOf(result, cnt);
 
     }
 }
